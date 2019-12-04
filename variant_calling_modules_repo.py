@@ -15,11 +15,11 @@ import openpyxl as excel
 def bwaAlign():
     return()
 
-# to compute GC Bias Metrics:
+# to compute GC Bias Metrics
 def collectGCBiasMetrics():
     return()
 
+# to compute Insert Size Metrics
 def collectInsertSizeMetrics():
     return()
-
 
