@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argparse
 
-from mal095_modules \
+from variant_calling_modules_repo \
     import collectGCBiasMetrics, \
     collectInsertSizeMetrics
 
