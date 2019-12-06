@@ -1,1 +1,1 @@
-# GATK_variant_calling
+# malaria_variant_calling
