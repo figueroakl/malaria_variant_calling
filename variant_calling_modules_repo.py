@@ -25,8 +25,8 @@ def qcheck(metaPath, refPath, path_to_picard):
         	for num in range(len(metadf)):
         		sampleid = metadf.iloc[num,0]
 				ipath = metadf.iloc[num,1]
-                collectGCBiasMetrics(path_to_picard, sampleid, ipath, refPath)
-                collectInsertSizeMetrics(path_to_picard, sampleid, ipath, refPath)
+                gc_met = collectGCBiasMetrics(path_to_picard, sampleid, ipath, refPath)
+                ins_met = collectInsertSizeMetrics(path_to_picard, sampleid, ipath, refPath)
 				
 
     else:
@@ -37,13 +37,19 @@ def qcheck(metaPath, refPath, path_to_picard):
 def collectGCBiasMetrics(path_to_picard, sampleid, ipath, refPath):
     opath = sampleid + "_gc_bias_metrics.txt"
     cmd = path_to_picard + "CollectGcBiasMetrics I=" + ipath + " O=" + opath + " R=" + refPath
-    os.system(cmd)
-    return()
+    err = os.system(cmd)
+    if err:
+        print 'Execution of "%s" failed!\n' % cmd
+        sys.exit(1)
+    return(opath)
 
 # to compute Insert Size Metrics
 def collectInsertSizeMetrics(path_to_picard, sampleid, ipath):
     opath = sampleid + "insert_size_metrics.txt"
     cmd = path_to_picard + "CollectInsertSizeMetrics I=" + ipath + " O=" + opath
-    os.system(cmd)
-    return()
+    err = os.system(cmd)
+    if err:
+        print 'Execution of "%s" failed!\n' % cmd
+        sys.exit(1)
+    return(opath)
 
