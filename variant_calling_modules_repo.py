@@ -66,3 +66,7 @@ def collectInsertSizeMetrics(path_to_picard, sampleid, ipath):
         print 'Execution of "%s" failed!\n' % cmd
         sys.exit(1)
     return(opath)
+
+def depthOfCoverage():
+    return()
+
