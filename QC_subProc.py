@@ -15,6 +15,7 @@ def main():
     parser.add_argument('--path_to_picard', required=True, help="Path to picard cmd line tools")
     #parser.add_argument('--upload_to_GC', default='gs://bucket/', type=str,
     #                    help="Directory to upload ouput on GC.")
+    paeser.add_argument('--output_dir', required=True, help="Path to the output directory")
     parser.add_argument('--verbose', action="store_true") # verbose replace verbose in if with dry run
     parser.add_argument('--dry_run', action="store_true")
     args = parser.parse_args()
@@ -22,7 +23,10 @@ def main():
     metafile = args.metafile_path
     ref = args.reference
     picard = args.path_to_picard
-    
-    qcheck(metafile, ref, picard)
+    outdir = args.output_dir
+
+    qcheck(metafile, ref, picard, outdir)
+
+    return()
     
 
