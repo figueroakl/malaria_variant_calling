@@ -15,18 +15,20 @@ def main():
     parser.add_argument('--sampleid', required=True, help="sampleid assigned to the bamfile")
     parser.add_argument('--reference', required=True, help="Path to the reference genome fasta file")
     parser.add_argument('--path_to_picard', required=True, help="Path to picard cmd line tools")
+    parser.add_argument('--path_to_gatk3', required=True, help="Path to gatk3 cmd line tools")
     parser.add_argument('--path_to_dir', required=True, help="Path to intermediate files")
-    parser.add_argument('--output_dir', required=True, help="Path to the output directory")
+    parser.add_argument('--output_file', required=True, help="Path to the output directory")
     args = parser.parse_args()
 
     bamfile = args.sample_path
     sampleid = args.sampleid
     ref = args.reference
     picard = args.path_to_picard
+    gatk3 = args.path_to_gatk3
     tmp_dir = args.path_to_dir
-    outdir = args.output_dir
+    outfile = args.output_file
 
-    qcheck(bamfile, sampleid, tmp_dir, ref, picard, outdir)
+    qcheck(bamfile, sampleid, tmp_dir, ref, picard, gatk3, outfile)
 
     return()
     

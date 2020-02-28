@@ -7,7 +7,7 @@ use Java-1.8
 use Picard-Tools
 use Anaconda
 use Samtools
-#source activate /home/unix/akhorgad/.conda/envs/var_call_env
+#source activate /home/unix/akhorgad/.conda/envs/mal_var_call
 
 cores=8
 cwd=$(pwd)
@@ -15,14 +15,18 @@ gatk="/humgen/gsa-hpprojects/GATK/bin/GenomeAnalysisTK-3.5-0-g36282e4/GenomeAnal
 run_dir="/seq/plasmodium/test"
 ref_path="/seq/plasmodium/panchal/reference_genome/pf3d7_genome.fasta"
 dict="/seq/plasmodium/panchal/reference_genome/pf3d7_genome.dict"
-#path_to_bam="/seq/plasmodium/data/inhouse/fastqs/Ecuador_bams/"
 outdir=${metadir}
 raw_fq=1
 
+# assign columns for summary file
+colnames="sampleid\tmaxCoverage_GC\tmean_insert_size\ttotal_reads\treads_aln\treads_aln_pct\tread_pair_duplicates\tpct_duplication"
+
+# make directories
 mkdir ${run_dir}/other_files
 mkdir ${run_dir}/gvcf
 temp_dir=${run_dir}/other_files
 mkdir ${temp_dir}/fastq
+echo -e  ${colnames} >  ${temp_dir}/qc_summary.txt
 
 # Create meta on bams
 #python ${base_path}create_meta.py --path_to_bam ${path_to_bam} --path_to_output ${metadir}
@@ -68,13 +72,13 @@ java -Xmx8G -jar $PICARD MarkDuplicates I=${temp_dir}/${sampleid}.sorted.bam \
 O=${temp_dir}/${sampleid}.marked_duplicates.bam \
 M=${temp_dir}/${sampleid}.marked_duplicates.metrics
 
-
 # Re-order BAM
 java -Xmx8G -jar $PICARD ReorderSam I=${temp_dir}/${sampleid}.marked_duplicates.bam \
 O=${temp_dir}/${sampleid}.reordered.bam R=${ref_path} SD=${dict}
 samtools index ${temp_dir}/${sampleid}.reordered.bam
 
 # Read Metrics / Picard Metrics / DepthOfCoverage
+bash other_metrics.sh ${temp_dir} ${sampleid} ${ref_path}
 
 # GATK RealignerTargetCreator
 java -Xmx8G -jar ${gatk} -T RealignerTargetCreator -nct 1 -nt ${cores} \
@@ -126,7 +130,3 @@ java -Xmx8G -jar ${gatk} -T HaplotypeCaller -nt 1 \
 
 done < ${metafile}
 
-
-# QC on bams using Picard-Tools
-#python ${base_path}QC_subProc.py --metafile_path ${metafile} --reference ${ref_path} --path_to_picard $PICARD \
-#--output_dir ${outdir}
